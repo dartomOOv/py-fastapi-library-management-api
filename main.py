@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -19,8 +21,8 @@ def get_db() -> Session:
 
 @app.get("/authors/", response_model=list[schemas.Author])
 def read_authors(
-    skip: int | None = 0,
-    limit: int | None = 5,
+    skip: Optional[int],
+    limit: Optional[int],
     db: Session = Depends(get_db)):
     return crud.get_all_authors(db, skip, limit)
 
@@ -50,9 +52,9 @@ def create_author(
 
 @app.get("/books/", response_model=list[schemas.Book])
 def read_books(
-    skip: int | None = 0,
-    limit: int | None = 5,
-    author_id: int | None = None,
+    skip: Optional[int],
+    limit: Optional[int],
+    author_id: Optional[int],
     db: Session = Depends(get_db),
 ):
     return crud.get_all_books(db, author_id, skip, limit)
